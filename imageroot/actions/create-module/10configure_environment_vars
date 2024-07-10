@@ -9,7 +9,7 @@ import json
 import sys
 import agent
 import os
-
+import secrets
 # Try to parse the stdin as JSON.
 # If parsing fails, output everything to stderr
 data = json.load(sys.stdin)
@@ -34,5 +34,12 @@ postgres_config = {
 }
 agent.write_envfile("database.env", postgres_config)
 
+DATABASE_URL = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@postgresql-app:5432/{POSTGRES_DB}"
+SECRET_KEY = secrets.token_urlsafe(64)
+app_config = {
+    "DATABASE_URL": DATABASE_URL,
+    "SECRET_KEY": SECRET_KEY
+}
+agent.write_envfile("app.env", app_config)
 # just before starting systemd unit
 #agent.dump_env()
