@@ -15,7 +15,30 @@ data = json.load(sys.stdin)
 
 #This is specific to you module, so you need to change it accordingly.
 # Upper case to set environment variable and minor case to read from stdin
+
+# Email Settings
+# Add EMAIL SETTINGS
+rdb = agent.redis_connect(use_replica=True)
+smtp_settings = agent.get_smarthost_settings(rdb)
 ALLOWED_HOSTS = data.get('host')
-agent.set_env('ALLOWED_HOSTS', ALLOWED_HOSTS)
+SMTP_HOST=smtp_settings['host']
+SMTP_PORT=smtp_settings['port']
+SMTP_USER=smtp_settings['username']
+SMTP_PASSWORD=smtp_settings['password']
+SMTP_ENCRYPTION=smtp_settings['encrypt_smtp']
+SMTP_TLSVERIFY='True' if smtp_settings['tls_verify'] else 'False'
+SMTP_SSLVERIFY='False' if smtp_settings['tls_verify'] else 'True'
+
+chief_config = {
+    "EMAIL_HOST": SMTP_HOST,
+    "EMAIL_PORT": SMTP_PORT,
+    "EMAIL_HOST_USER": SMTP_USER,
+    "EMAIL_HOST_PASSWORD": SMTP_PASSWORD,
+    "EMAIL_USE_TLS": SMTP_ENCRYPTION,
+    "EMAIL_USE_SSL": not SMTP_ENCRYPTION,
+    "ALLOWED_HOSTS": ALLOWED_HOSTS,
+}
+
+agent.write_envfile("chief.env", chief_config)
 # just before starting systemd unit
 agent.dump_env()
