@@ -22,7 +22,7 @@ ExecStart=/usr/bin/podman run --conmon-pidfile %t/chiefonboarding-app.pid \
     --cidfile %t/chiefonboarding-app.ctr-id --cgroups=no-conmon \
     --pod-id-file %t/chiefonboarding.pod-id --replace -d --name  chiefonboarding-app \
     --env-file=%S/state/app.env \
-    --env ALLOWED_HOSTS=${ALLOWED_HOSTS} \
+    --env-file=%S/state/chief.env \
     ${CHIEFONBOARDING_IMAGE}
 ExecStop=/usr/bin/podman stop --ignore --cidfile %t/chiefonboarding-app.ctr-id -t 10
 ExecReload=/usr/bin/podman kill -s HUP chiefonboarding-app
