@@ -14,7 +14,7 @@ images=()
 repobase="${REPOBASE:-ghcr.io/geniusdynamics}"
 # Configure the image name
 reponame="chiefonboarding"
-APP_VERSION="v2.2.2"
+APP_VERSION="v2.2.7"
 
 # Create a new empty container image
 container=$(buildah from scratch)
