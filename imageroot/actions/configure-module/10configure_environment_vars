@@ -28,6 +28,8 @@ SMTP_PASSWORD=smtp_settings['password']
 SMTP_ENCRYPTION=smtp_settings['encrypt_smtp']
 SMTP_TLSVERIFY='True' if smtp_settings['tls_verify'] else 'False'
 SMTP_SSLVERIFY='False' if smtp_settings['tls_verify'] else 'True'
+ALLOW_GOOGLE_SSO = data.get('allow_google_sso', False)
+
 
 chief_config = {
     "EMAIL_HOST": SMTP_HOST,
@@ -37,6 +39,16 @@ chief_config = {
     "EMAIL_USE_TLS": SMTP_ENCRYPTION,
     "EMAIL_USE_SSL": not SMTP_ENCRYPTION,
     "ALLOWED_HOSTS": ALLOWED_HOSTS,
+    "ALLOW_GOOGLE_SSO": ALLOW_GOOGLE_SSO,
+    "GOOGLE_SSO_CLIENT_ID": data.get('google_sso_client_id', ''),
+    "GOOGLE_SSO_SECRET": data.get('google_sso_secret', ''),
+    "SOCIALACCOUNT_PROVIDERS": json.dumps(data.get('socialaccount_providers', {})),
+    "SSO_AUTO_CREATE_USER": data.get('sso_auto_create_user', True),
+    "OIDC_ROLE_NEW_HIRE_PATTERN": data.get('oidc_role_new_hire_pattern', ''),
+    "OIDC_ROLE_ADMIN_PATTERN": data.get('oidc_role_admin_pattern', ''),
+    "OIDC_ROLE_MANAGER_PATTERN": data.get('oidc_role_manager_pattern', ''),
+    "OIDC_ROLE_PATH_IN_RETURN": data.get('oidc_role_path_in_return', 'groups'),
+    "ALLAUTH_PROVIDERS": data.get('allauth_providers', ''),
 }
 
 agent.write_envfile("chief.env", chief_config)
