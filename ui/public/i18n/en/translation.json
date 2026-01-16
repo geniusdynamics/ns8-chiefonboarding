@@ -38,7 +38,16 @@
     "instance_configuration": "Configure chiefonboarding",
     "domain_already_used_in_traefik": "Domain already used in traefik",
     "host_pattern": "Must be a valid fully qualified domain name",
-    "host_format": "Must be a valid fully qualified domain name"
+    "host_format": "Must be a valid fully qualified domain name",
+    "allow_google_sso": "Allow Google SSO",
+    "google_sso_client_id": "Google SSO Client ID",
+    "google_sso_secret": "Google SSO Secret",
+    "sso_auto_create_user": "Auto-create user from SSO",
+    "oidc_role_new_hire_pattern": "New hire role pattern",
+    "oidc_role_admin_pattern": "Admin role pattern",
+    "oidc_role_manager_pattern": "Manager role pattern",
+    "oidc_role_path_in_return": "OIDC role path in token",
+    "allauth_providers": "Allauth providers"
   },
   "about": {
     "title": "About"
