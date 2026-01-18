@@ -21,6 +21,19 @@ config = {}
 config["host"] = os.getenv("TRAEFIK_HOST","")
 config["http2https"] = os.getenv("TRAEFIK_HTTP2HTTPS") == "True"
 config["lets_encrypt"] = os.getenv("TRAEFIK_LETS_ENCRYPT") == "True"
+if os.path.exists("chief.env"): 
+    data = agent.read_envfile("chief.env")
+    config["allow_google_sso"] = data.get("ALLOW_GOOGLE_SSO", "False") == "True"
+    config["google_sso_client_id"] = data.get("GOOGLE_SSO_CLIENT_ID", "")
+    config["google_sso_secret"] = data.get("GOOGLE_SSO_SECRET", "")
+    config["socialaccount_providers"] = json.loads(data.get("SOCIALACCOUNT_PROVIDERS", "{}"))
+    config["sso_auto_create_user"] = data.get("SSO_AUTO_CREATE_USER", "True") == "True"
+    config["oidc_role_new_hire_pattern"] = data.get("OIDC_ROLE_NEW_HIRE_PATTERN", "")
+    config["oidc_role_admin_pattern"] = data.get("OIDC_ROLE_ADMIN_PATTERN", "")
+    config["oidc_role_manager_pattern"] = data.get("OIDC_ROLE_MANAGER_PATTERN", "")
+    config["oidc_role_path_in_return"] = data.get("OIDC_ROLE_PATH_IN_RETURN", "groups")
+    config["allauth_providers"] = data.get("ALLAUTH_PROVIDERS", "")
+
 
 # Dump the configuration to stdout
 json.dump(config, fp=sys.stdout)

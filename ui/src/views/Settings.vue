@@ -66,6 +66,104 @@
               <cv-accordion-item :open="toggleAccordion[0]">
                 <template slot="title">{{ $t("settings.advanced") }}</template>
                 <template slot="content">
+                  <cv-toggle
+                    value="allowGoogleSso"
+                    :label="$t('settings.allow_google_sso')"
+                    v-model="isAllowGoogleSsoEnabled"
+                    :disabled="loading.getConfiguration || loading.configureModule"
+                    class="mg-bottom"
+                  >
+                    <template slot="text-left">{{
+                      $t("settings.disabled")
+                    }}</template>
+                    <template slot="text-right">{{
+                      $t("settings.enabled")
+                    }}</template>
+                  </cv-toggle>
+                  <cv-text-input
+                    :label="$t('settings.google_sso_client_id')"
+                    placeholder="xxxxx"
+                    v-model.trim="googleSsoClientId"
+                    class="mg-bottom"
+                    :invalid-message="$t(error.google_sso_client_id)"
+                    :disabled="loading.getConfiguration || loading.configureModule"
+                    ref="googleSsoClientId"
+                  >
+                  </cv-text-input>
+                  <cv-text-input
+                    :label="$t('settings.google_sso_secret')"
+                    placeholder="xxxxx"
+                    v-model.trim="googleSsoSecret"
+                    class="mg-bottom"
+                    :invalid-message="$t(error.google_sso_secret)"
+                    :disabled="loading.getConfiguration || loading.configureModule"
+                    ref="googleSsoSecret"
+                  >
+                  </cv-text-input>
+                  <cv-toggle
+                    value="ssoAutoCreateUser"
+                    :label="$t('settings.sso_auto_create_user')"
+                    v-model="isSsoAutoCreateUserEnabled"
+                    :disabled="loading.getConfiguration || loading.configureModule"
+                    class="mg-bottom"
+                  >
+                    <template slot="text-left">{{
+                      $t("settings.disabled")
+                    }}</template>
+                    <template slot="text-right">{{
+                      $t("settings.enabled")
+                    }}</template>
+                  </cv-toggle>
+                  <cv-text-input
+                    :label="$t('settings.oidc_role_new_hire_pattern')"
+                    placeholder="^cn=Newhires.*"
+                    v-model.trim="oidcRoleNewHirePattern"
+                    class="mg-bottom"
+                    :invalid-message="$t(error.oidc_role_new_hire_pattern)"
+                    :disabled="loading.getConfiguration || loading.configureModule"
+                    ref="oidcRoleNewHirePattern"
+                  >
+                  </cv-text-input>
+                  <cv-text-input
+                    :label="$t('settings.oidc_role_admin_pattern')"
+                    placeholder="^cn=Administrators.*"
+                    v-model.trim="oidcRoleAdminPattern"
+                    class="mg-bottom"
+                    :invalid-message="$t(error.oidc_role_admin_pattern)"
+                    :disabled="loading.getConfiguration || loading.configureModule"
+                    ref="oidcRoleAdminPattern"
+                  >
+                  </cv-text-input>
+                  <cv-text-input
+                    :label="$t('settings.oidc_role_manager_pattern')"
+                    placeholder="^cn=Managers.*"
+                    v-model.trim="oidcRoleManagerPattern"
+                    class="mg-bottom"
+                    :invalid-message="$t(error.oidc_role_manager_pattern)"
+                    :disabled="loading.getConfiguration || loading.configureModule"
+                    ref="oidcRoleManagerPattern"
+                  >
+                  </cv-text-input>
+                  <cv-text-input
+                    :label="$t('settings.oidc_role_path_in_return')"
+                    placeholder="groups"
+                    v-model.trim="oidcRolePathInReturn"
+                    class="mg-bottom"
+                    :invalid-message="$t(error.oidc_role_path_in_return)"
+                    :disabled="loading.getConfiguration || loading.configureModule"
+                    ref="oidcRolePathInReturn"
+                  >
+                  </cv-text-input>
+                  <cv-text-input
+                    :label="$t('settings.allauth_providers')"
+                    placeholder="openid_connect"
+                    v-model.trim="allauthProviders"
+                    class="mg-bottom"
+                    :invalid-message="$t(error.allauth_providers)"
+                    :disabled="loading.getConfiguration || loading.configureModule"
+                    ref="allauthProviders"
+                  >
+                  </cv-text-input>
                 </template>
               </cv-accordion-item>
             </cv-accordion>
@@ -125,6 +223,15 @@ export default {
       host: "",
       isLetsEncryptEnabled: false,
       isHttpToHttpsEnabled: true,
+      isAllowGoogleSsoEnabled: false,
+      googleSsoClientId: "",
+      googleSsoSecret: "",
+      isSsoAutoCreateUserEnabled: true,
+      oidcRoleNewHirePattern: "",
+      oidcRoleAdminPattern: "",
+      oidcRoleManagerPattern: "",
+      oidcRolePathInReturn: "groups",
+      allauthProviders: "",
       loading: {
         getConfiguration: false,
         configureModule: false,
@@ -135,6 +242,15 @@ export default {
         host: "",
         lets_encrypt: "",
         http2https: "",
+        allow_google_sso: "",
+        google_sso_client_id: "",
+        google_sso_secret: "",
+        sso_auto_create_user: "",
+        oidc_role_new_hire_pattern: "",
+        oidc_role_admin_pattern: "",
+        oidc_role_manager_pattern: "",
+        oidc_role_path_in_return: "",
+        allauth_providers: "",
       },
     };
   },
@@ -202,6 +318,15 @@ export default {
       this.host = config.host;
       this.isLetsEncryptEnabled = config.lets_encrypt;
       this.isHttpToHttpsEnabled = config.http2https;
+      this.isAllowGoogleSsoEnabled = config.allow_google_sso;
+      this.googleSsoClientId = config.google_sso_client_id;
+      this.googleSsoSecret = config.google_sso_secret;
+      this.isSsoAutoCreateUserEnabled = config.sso_auto_create_user;
+      this.oidcRoleNewHirePattern = config.oidc_role_new_hire_pattern;
+      this.oidcRoleAdminPattern = config.oidc_role_admin_pattern;
+      this.oidcRoleManagerPattern = config.oidc_role_manager_pattern;
+      this.oidcRolePathInReturn = config.oidc_role_path_in_return;
+      this.allauthProviders = config.allauth_providers;
 
       this.loading.getConfiguration = false;
       this.focusElement("host");
@@ -271,6 +396,15 @@ export default {
             host: this.host,
             lets_encrypt: this.isLetsEncryptEnabled,
             http2https: this.isHttpToHttpsEnabled,
+            allow_google_sso: this.isAllowGoogleSsoEnabled,
+            google_sso_client_id: this.googleSsoClientId,
+            google_sso_secret: this.googleSsoSecret,
+            sso_auto_create_user: this.isSsoAutoCreateUserEnabled,
+            oidc_role_new_hire_pattern: this.oidcRoleNewHirePattern,
+            oidc_role_admin_pattern: this.oidcRoleAdminPattern,
+            oidc_role_manager_pattern: this.oidcRoleManagerPattern,
+            oidc_role_path_in_return: this.oidcRolePathInReturn,
+            allauth_providers: this.allauthProviders,
           },
           extra: {
             title: this.$t("settings.instance_configuration", {
