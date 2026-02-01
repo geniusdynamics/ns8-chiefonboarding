@@ -164,6 +164,56 @@
                     ref="allauthProviders"
                   >
                   </cv-text-input>
+                  <cv-text-input
+                    :label="$t('settings.aws_s3_endpoint_url')"
+                    placeholder="https://s3.eu-west-1.amazonaws.com"
+                    v-model.trim="awsS3EndpointUrl"
+                    class="mg-bottom"
+                    :invalid-message="$t(error.aws_s3_endpoint_url)"
+                    :disabled="loading.getConfiguration || loading.configureModule"
+                    ref="awsS3EndpointUrl"
+                  >
+                  </cv-text-input>
+                  <cv-text-input
+                    :label="$t('settings.aws_access_key_id')"
+                    placeholder="AKIAXXXXXXXX"
+                    v-model.trim="awsAccessKeyId"
+                    class="mg-bottom"
+                    :invalid-message="$t(error.aws_access_key_id)"
+                    :disabled="loading.getConfiguration || loading.configureModule"
+                    ref="awsAccessKeyId"
+                  >
+                  </cv-text-input>
+                  <cv-text-input
+                    :label="$t('settings.aws_secret_access_key')"
+                    placeholder="XXXXXXXXXXXXX"
+                    v-model.trim="awsSecretAccessKey"
+                    class="mg-bottom"
+                    :invalid-message="$t(error.aws_secret_access_key)"
+                    :disabled="loading.getConfiguration || loading.configureModule"
+                    ref="awsSecretAccessKey"
+                  >
+                  </cv-text-input>
+                  <cv-text-input
+                    :label="$t('settings.aws_storage_bucket_name')"
+                    placeholder="bucket-name"
+                    v-model.trim="awsStorageBucketName"
+                    class="mg-bottom"
+                    :invalid-message="$t(error.aws_storage_bucket_name)"
+                    :disabled="loading.getConfiguration || loading.configureModule"
+                    ref="awsStorageBucketName"
+                  >
+                  </cv-text-input>
+                  <cv-text-input
+                    :label="$t('settings.aws_default_region')"
+                    placeholder="eu-west-1"
+                    v-model.trim="awsDefaultRegion"
+                    class="mg-bottom"
+                    :invalid-message="$t(error.aws_default_region)"
+                    :disabled="loading.getConfiguration || loading.configureModule"
+                    ref="awsDefaultRegion"
+                  >
+                  </cv-text-input>
                 </template>
               </cv-accordion-item>
             </cv-accordion>
@@ -232,6 +282,11 @@ export default {
       oidcRoleManagerPattern: "",
       oidcRolePathInReturn: "groups",
       allauthProviders: "",
+      awsS3EndpointUrl: "",
+      awsAccessKeyId: "",
+      awsSecretAccessKey: "",
+      awsStorageBucketName: "",
+      awsDefaultRegion: "",
       loading: {
         getConfiguration: false,
         configureModule: false,
@@ -251,6 +306,11 @@ export default {
         oidc_role_manager_pattern: "",
         oidc_role_path_in_return: "",
         allauth_providers: "",
+        aws_s3_endpoint_url: "",
+        aws_access_key_id: "",
+        aws_secret_access_key: "",
+        aws_storage_bucket_name: "",
+        aws_default_region: "",
       },
     };
   },
@@ -327,6 +387,11 @@ export default {
       this.oidcRoleManagerPattern = config.oidc_role_manager_pattern;
       this.oidcRolePathInReturn = config.oidc_role_path_in_return;
       this.allauthProviders = config.allauth_providers;
+      this.awsS3EndpointUrl = config.aws_s3_endpoint_url;
+      this.awsAccessKeyId = config.aws_access_key_id;
+      this.awsSecretAccessKey = config.aws_secret_access_key;
+      this.awsStorageBucketName = config.aws_storage_bucket_name;
+      this.awsDefaultRegion = config.aws_default_region;
 
       this.loading.getConfiguration = false;
       this.focusElement("host");
@@ -405,6 +470,11 @@ export default {
             oidc_role_manager_pattern: this.oidcRoleManagerPattern,
             oidc_role_path_in_return: this.oidcRolePathInReturn,
             allauth_providers: this.allauthProviders,
+            aws_s3_endpoint_url: this.awsS3EndpointUrl,
+            aws_access_key_id: this.awsAccessKeyId,
+            aws_secret_access_key: this.awsSecretAccessKey,
+            aws_storage_bucket_name: this.awsStorageBucketName,
+            aws_default_region: this.awsDefaultRegion,
           },
           extra: {
             title: this.$t("settings.instance_configuration", {
