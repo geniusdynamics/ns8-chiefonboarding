@@ -13,22 +13,23 @@ import agent
 # If parsing fails, output everything to stderr
 data = json.load(sys.stdin)
 
-#This is specific to you module, so you need to change it accordingly.
+# This is specific to you module, so you need to change it accordingly.
 # Upper case to set environment variable and minor case to read from stdin
 
 # Email Settings
 # Add EMAIL SETTINGS
 rdb = agent.redis_connect(use_replica=True)
 smtp_settings = agent.get_smarthost_settings(rdb)
-ALLOWED_HOSTS = data.get('host')
-SMTP_HOST=smtp_settings['host']
-SMTP_PORT=smtp_settings['port']
-SMTP_USER=smtp_settings['username']
-SMTP_PASSWORD=smtp_settings['password']
-SMTP_ENCRYPTION=smtp_settings['encrypt_smtp']
-SMTP_TLSVERIFY='True' if smtp_settings['tls_verify'] else 'False'
-SMTP_SSLVERIFY='False' if smtp_settings['tls_verify'] else 'True'
-ALLOW_GOOGLE_SSO = data.get('allow_google_sso', False)
+ALLOWED_HOSTS = data.get("host")
+SMTP_HOST = smtp_settings["host"]
+SMTP_PORT = smtp_settings["port"]
+SMTP_USER = smtp_settings["username"]
+SMTP_PASSWORD = smtp_settings["password"]
+SMTP_ENCRYPTION = smtp_settings["encrypt_smtp"]
+SMTP_TLSVERIFY = "True" if smtp_settings["tls_verify"] else "False"
+SMTP_SSLVERIFY = "False" if smtp_settings["tls_verify"] else "True"
+ALLOW_GOOGLE_SSO = data.get("allow_google_sso", False)
+DEFAULT_EMAIL_FROM = SMTP_USER
 
 
 chief_config = {
@@ -40,15 +41,20 @@ chief_config = {
     "EMAIL_USE_SSL": not SMTP_ENCRYPTION,
     "ALLOWED_HOSTS": ALLOWED_HOSTS,
     "ALLOW_GOOGLE_SSO": ALLOW_GOOGLE_SSO,
-    "GOOGLE_SSO_CLIENT_ID": data.get('google_sso_client_id', ''),
-    "GOOGLE_SSO_SECRET": data.get('google_sso_secret', ''),
-    "SOCIALACCOUNT_PROVIDERS": json.dumps(data.get('socialaccount_providers', {})),
-    "SSO_AUTO_CREATE_USER": data.get('sso_auto_create_user', True),
-    "OIDC_ROLE_NEW_HIRE_PATTERN": data.get('oidc_role_new_hire_pattern', ''),
-    "OIDC_ROLE_ADMIN_PATTERN": data.get('oidc_role_admin_pattern', ''),
-    "OIDC_ROLE_MANAGER_PATTERN": data.get('oidc_role_manager_pattern', ''),
-    "OIDC_ROLE_PATH_IN_RETURN": data.get('oidc_role_path_in_return', 'groups'),
-    "ALLAUTH_PROVIDERS": data.get('allauth_providers', ''),
+    "GOOGLE_SSO_CLIENT_ID": data.get("google_sso_client_id", ""),
+    "GOOGLE_SSO_SECRET": data.get("google_sso_secret", ""),
+    "SOCIALACCOUNT_PROVIDERS": json.dumps(data.get("socialaccount_providers", {})),
+    "SSO_AUTO_CREATE_USER": data.get("sso_auto_create_user", True),
+    "OIDC_ROLE_NEW_HIRE_PATTERN": data.get("oidc_role_new_hire_pattern", ""),
+    "OIDC_ROLE_ADMIN_PATTERN": data.get("oidc_role_admin_pattern", ""),
+    "OIDC_ROLE_MANAGER_PATTERN": data.get("oidc_role_manager_pattern", ""),
+    "OIDC_ROLE_PATH_IN_RETURN": data.get("oidc_role_path_in_return", "groups"),
+    "ALLAUTH_PROVIDERS": data.get("allauth_providers", ""),
+    "AWS_S3_ENDPOINT_URL": data.get("aws_s3_endpoint_url", ""),
+    "AWS_ACCESS_KEY_ID": data.get("aws_access_key_id", ""),
+    "AWS_SECRET_ACCESS_KEY": data.get("aws_secret_access_key", ""),
+    "AWS_STORAGE_BUCKET_NAME": data.get("aws_storage_bucket_name", ""),
+    "AWS_DEFAULT_REGION": data.get("aws_default_region", ""),
 }
 
 agent.write_envfile("chief.env", chief_config)
