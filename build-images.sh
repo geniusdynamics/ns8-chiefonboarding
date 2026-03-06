@@ -15,7 +15,7 @@ repobase="${REPOBASE:-ghcr.io/geniusdynamics}"
 # Configure the image name
 reponame="chiefonboarding"
 
-APP_VERSION="v2.2.7"
+APP_VERSION="v2.4.0"
 
 
 # Create a new empty container image
