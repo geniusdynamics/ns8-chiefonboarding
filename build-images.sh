@@ -14,8 +14,12 @@ images=()
 repobase="${REPOBASE:-ghcr.io/geniusdynamics}"
 # Configure the image name
 reponame="chiefonboarding"
+# Node.js 25+ no longer ships Corepack, install it from npm
+# renovate: datasource=npm packageName=corepack
+corepack_version=0.36.0
 
-APP_VERSION="v2.4.0"
+# renovate: datasource=docker packageName=docker.io/chiefonboarding/chiefonboarding
+APP_VERSION=v2.5.2
 
 
 # Create a new empty container image
@@ -24,7 +28,8 @@ container=$(buildah from scratch)
 # Reuse existing nodebuilder-chiefonboarding container, to speed up builds
 if ! buildah containers --format "{{.ContainerName}}" | grep -q nodebuilder-chiefonboarding; then
 	echo "Pulling NodeJS runtime..."
-	buildah from --name nodebuilder-chiefonboarding -v "${PWD}:/usr/src:Z" docker.io/library/node:lts
+	buildah from --name nodebuilder-chiefonboarding -v "${PWD}:/usr/src:Z" docker.io/library/node:26.13.0-slim
+	buildah run nodebuilder-chiefonboarding sh -c "npm install -g corepack@${corepack_version} && corepack enable"
 fi
 
 echo "Build static UI files with node..."
@@ -48,7 +53,8 @@ buildah config --entrypoint=/ \
 	--label="org.nethserver.authorizations=traefik@node:routeadm" \
 	--label="org.nethserver.tcp-ports-demand=1" \
 	--label="org.nethserver.rootfull=0" \
-	--label="org.nethserver.images=docker.io/postgres:15.5-alpine3.19 docker.io/chiefonboarding/chiefonboarding:${APP_VERSION}" \
+    --label="org.nethserver.min-core=3.0.0" \
+	--label="org.nethserver.images=docker.io/postgres:15.20-alpine3.24 docker.io/chiefonboarding/chiefonboarding:${APP_VERSION}" \
 	"${container}"
 # Commit the image
 buildah commit "${container}" "${repobase}/${reponame}"
