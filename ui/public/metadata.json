@@ -1,9 +1,12 @@
 {
   "name": "chiefonboarding",
   "description": {
-    "en": "My chiefonboarding module"
+    "en": "Chief Onboarding is a self-hosted tool that guides new employees through onboarding with tasks, resources and to-do lists.",
+    "it": "Chief Onboarding guida i nuovi dipendenti nell'inserimento con attività, risorse ed elenchi di cose da fare."
   },
-  "categories": [],
+  "categories": [
+    "collaboration"
+  ],
   "authors": [
     {
       "name": "Name Surname",
