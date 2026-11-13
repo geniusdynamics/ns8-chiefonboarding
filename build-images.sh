@@ -19,7 +19,7 @@ reponame="chiefonboarding"
 corepack_version=0.36.0
 
 # renovate: datasource=docker packageName=docker.io/chiefonboarding/chiefonboarding
-APP_VERSION=v2.4.0
+APP_VERSION=v2.5.2
 
 
 # Create a new empty container image
